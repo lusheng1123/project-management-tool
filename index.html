@@ -10,6 +10,7 @@
 <header class="app-header">
 <h1>Project Management Tool</h1>
 <span class="badge-mode mode-dev" id="modeBadge">DEV</span>
+<button class="btn-sm btn-reset" onclick="localStorage.removeItem('pm_seeded');for(let k of Object.keys(localStorage)){if(k.startsWith('pm_'))localStorage.removeItem(k)};location.reload()" title="Clear all data and re-seed">🔄 Reset</button>
 </header>
 <nav class="tab-nav" id="tabNav"></nav>
 <main class="main-content" id="mainContent"><div class="loading">Loading...</div></main>
