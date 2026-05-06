@@ -21,7 +21,7 @@ The file seed-data.js populates localStorage with realistic banking portfolio da
 | pm_product | 10 | 10 banking products with governance statuses |
 | pm_capabilityproduct | 14 | 14 many-to-many capability-product links |
 | pm_requirement | 20 | 20 business requirements with PSC approval tracking |
-| pm_project | 6 | 6 active/planned projects with full staffing |
+| pm_project | 12 | 12 projects across 5-stage pipeline (Onboarding → Live) |
 | pm_control | 8 | 8 regulatory and compliance controls |
 | pm_epic | 10 | 10 epics with RAG status and Jira links |
 | pm_userstory | 15 | 15 user stories with acceptance criteria |
