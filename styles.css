@@ -950,6 +950,39 @@ body {
   .roadmap-nav-label { min-width: auto; }
 }
 
+/* ======== PROJECT EPIC EXPAND ======== */
+.project-epic-row td {
+  padding: 8px 14px 8px 40px !important;
+  background: #f8fafc;
+}
+
+.project-epic-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.project-epic-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  flex: 1;
+}
+
+.project-epic-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.project-epic-devs {
+  font-size: 0.75rem;
+  color: var(--primary);
+}
+
+.project-main-row.project-row-expanded {
+  background: #f0f4ff;
+}
+
 /* ======== RESPONSIVE ======== */
 @media (max-width: 768px) {
   .app-header { padding: 10px 16px; }

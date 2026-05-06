@@ -595,21 +595,35 @@ class Views {
 
     let rows = '';
     for (const proj of data) {
-      const epicCount = epics.filter(e => e.pm_projectname === proj.id).length;
+      const projEpics = epics.filter(e => e.pm_projectname === proj.id);
+      const epicCount = projEpics.length;
       const riskCount = risks.filter(r => r.pm_projectname === proj.id).length;
+      const epicRows = projEpics.map(e => {
+        const ragClass = e.pm_ragstatus === 'G' ? 'badge-green' : e.pm_ragstatus === 'A' ? 'badge-amber' : e.pm_ragstatus === 'R' ? 'badge-red' : '';
+        return `<tr class="project-epic-row" data-project="${proj.id}" style="display:none">
+          <td colspan="6">
+            <div class="project-epic-item">
+              <span class="badge ${ragClass}">${e.pm_ragstatus || '—'}</span>
+              <span class="project-epic-name">${e.pm_title}</span>
+              <span class="project-epic-meta">${e.pm_effort || '—'}d | ${e.pm_startdate || '?'} → ${e.pm_releasedate || '?'}</span>
+              <span class="project-epic-devs">${e.pm_developers || '—'}</span>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+
       rows += `
-        <tr>
+        <tr class="project-main-row" onclick="Views._toggleProjectEpics('${proj.id}')" data-project="${proj.id}" style="cursor:pointer">
           <td><strong>${proj.pm_name}</strong><br><small>${proj.pm_scope ? proj.pm_scope.substring(0, 80) + '...' : ''}</small></td>
           <td>${proj.pm_productname ? await ds.getLookupName('pm_product', proj.pm_productname) : '—'}</td>
           <td><span class="badge ${Components._getBadgeClass(proj.pm_status)}">${proj.pm_status}</span></td>
           <td>${proj.pm_overallcompletion || 0}%</td>
           <td>${epicCount} epics, ${riskCount} risks</td>
-          <td class="actions-cell">
+          <td class="actions-cell" onclick="event.stopPropagation()">
             <button class="btn-sm btn-edit" onclick="Views._editProject('${proj.id}')">✏️ Edit</button>
             <button class="btn-sm btn-delete" onclick="Views._deleteProject('${proj.id}')">🗑️</button>
           </td>
-        </tr>
-      `;
+        </tr>${epicRows}`;
     }
 
     return `
@@ -626,6 +640,15 @@ class Views {
         </table>
       `}</div>
     `;
+  }
+
+  static _toggleProjectEpics(projectId) {
+    const rows = document.querySelectorAll(`tr.project-epic-row[data-project="${projectId}"]`);
+    const mainRow = document.querySelector(`tr.project-main-row[data-project="${projectId}"]`);
+    if (!rows.length) return;
+    const isHidden = rows[0].style.display === 'none';
+    rows.forEach(r => { r.style.display = isHidden ? '' : 'none'; });
+    if (mainRow) mainRow.classList.toggle('project-row-expanded', isHidden);
   }
 
   static async _newProject() {
