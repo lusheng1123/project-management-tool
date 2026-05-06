@@ -1,8 +1,8 @@
 # Project Management Tool — Requirements Specification
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Status:** Final  
-**Last Updated:** 2025-05-06
+**Last Updated:** 2026-05-06
 
 ---
 
@@ -23,18 +23,19 @@ The application requires **zero dependencies**, **no npm**, **no build step**, a
 
 ### 2.1 Modules
 
-The tool supports 8 modules (dashboards):
+The tool supports 9 modules (dashboards):
 
 | # | Module | Entity | Description |
 |---|--------|--------|-------------|
 | F1 | Resources | pm_resource | Team member directory with roles, departments, cost, and status |
 | F2 | Capabilities | pm_capability | Business/technical capabilities with N:N product linking |
-| F3 | Products | pm_product | Products and platform components with governance status |
+| F3 | Products | pm_product | Products and platform components with governance status and pipeline view |
 | F4 | Requirements | pm_requirement | Demand intake with PSC approval workflow and capability-product filtering |
-| F5 | Projects | pm_project | Project portfolio with resource assignments (PO, DL, IT Lead, BA) |
+| F5 | Projects | pm_project | Project portfolio with 5-stage pipeline (Onboarding → Dev Phase 1 → Dev Phase 2 → Review → Live) |
 | F6 | Epics | pm_epic | Work breakdown with RAG status, user stories, team assignments, Jira links |
 | F7 | Risks | pm_risk | RAID log with project linkage and dependency mapping |
 | F8 | Dependencies | pm_dependency | Risk-to-risk dependency tracking |
+| F9 | Roadmap | (multi-entity) | Calendar view (Month/Week/Day) showing products & projects on timeline |
 
 ### 2.2 CRUD Operations
 
@@ -50,11 +51,15 @@ All 12 entities support full Create, Read, Update, Delete:
 | Feature | Description |
 |---------|-------------|
 | Dynamic Modals | Generated from field defs; supports text, number, date, email, choice, multiline, lookup |
+| 5-Stage Pipeline | Projects flow through Onboarding → Dev Phase 1 → Dev Phase 2 → Review → Live |
+| Product Pipeline View | 📊 Kanban board per product showing projects grouped by stage |
+| Roadmap Calendar | Month/Week/Day calendar views with color-coded project/product bars |
 | Filtered Dropdowns | Products filtered by selected capability; resources filtered by department |
-| Many-to-Many Linking | Capabilities <-> Products via pm_capabilityproduct link table with checkbox UI |
+| Many-to-Many Linking | Capabilities ↔ Products via pm_capabilityproduct link table with checkbox UI |
 | RAG Visualization | Green/Amber/Red badges on epics based on pm_ragstatus |
-| Stats Dashboard | Summary cards per module (total, active, breakdowns) |
+| Stats Dashboard | Summary cards per module (total, active, breakdowns, overdue) |
 | Toast Notifications | Auto-dismiss success/error messages after CRUD operations |
+| Reset Button | 🔄 One-click localStorage clear and re-seed in DEV mode header |
 | Responsive Design | CSS grid + flexbox; desktop and tablet |
 
 ### 2.4 PSC Approval Workflow (Requirements)
@@ -76,7 +81,7 @@ All 12 entities support full Create, Read, Update, Delete:
 | 3 | pm_product | Product | 10 | has many cap-product links, requirements, projects |
 | 4 | pm_capabilityproduct | Capability-Product Link | 14 | belongs to capability, belongs to product |
 | 5 | pm_requirement | Requirement | 20 | belongs to capability, product, project |
-| 6 | pm_project | Project | 6 | belongs to product, has many controls/epics/risks/requirements |
+| 6 | pm_project | Project | 12 | belongs to product, has many controls/epics/risks/requirements |
 | 7 | pm_control | Control | 8 | belongs to project |
 | 8 | pm_epic | Epic | 10 | belongs to project, has many user stories and assignments |
 | 9 | pm_userstory | User Story | 15 | belongs to epic |

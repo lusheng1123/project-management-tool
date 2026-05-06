@@ -23,11 +23,12 @@ A standalone, single-page project management application built with vanilla HTML
 | **Capabilities** | Business/technical capabilities with product linking (N:N) |
 | **Products** | Products and platform components |
 | **Requirements** | Demand intake with PSC approval workflow, capability-product filtering |
-| **Projects** | Project portfolio with resource assignments |
+| **Projects** | Project portfolio with 5-stage pipeline (Onboarding → Dev Phase 1 → Dev Phase 2 → Review → Live) |
 | **Controls** | Governance gates, reviews, and audits per project |
 | **Epics** | Work breakdown with RAG status, user stories, and team assignments |
 | **Risks** | RAID log with probability, impact, and mitigation tracking |
 | **Dependencies** | Risk-to-risk dependency mapping |
+| **Roadmap** | Calendar view (Month/Week/Day) showing products & projects on timeline |
 
 ### Cross-Cutting Features
 
@@ -36,6 +37,9 @@ A standalone, single-page project management application built with vanilla HTML
 - Filtered dropdowns (e.g., products filtered by selected capability)
 - Many-to-many linking (capabilities ↔ products)
 - RAG status visualization
+- 5-stage project pipeline with kanban board per product (📊 Pipeline button)
+- Roadmap calendar with Month/Week/Day views and color-coded bars
+- 🔄 Reset button in header to clear data and re-seed
 - Stats dashboard per module
 - Toast notifications
 - Responsive design
@@ -52,10 +56,12 @@ project-management-tool/
 ├── seed-data.js            # DEV-only sample data seeder
 ├── data.js                 # Data service (DEV: localStorage, PROD: Xrm.WebApi)
 ├── components.js           # Reusable UI components (modals, tables, stats, filters)
-├── views.js                # 8 dashboard views with full CRUD logic
+├── views.js                # 9 dashboard views (Resources → Roadmap) with full CRUD logic
 ├── app.js                  # App init, navigation, event delegation
 ├── docs/
+│   ├── REQUIREMENTS.md     # Full requirements specification
 │   ├── TABLES-DATAVERSE.md # Dataverse table specs (12 tables)
+│   ├── SEED-DATA.md        # Sample data reference
 │   └── DEPLOY-GUIDE.md     # Step-by-step Power Apps migration
 └── .gitignore
 ```
@@ -67,7 +73,8 @@ project-management-tool/
 ### DEV Mode (Default)
 
 - Data stored in browser `localStorage`
-- Auto-seeded with sample data on first load
+- Auto-seeded with 30 resources, 12 projects, and 100+ records on first load
+- **🔄 Reset** button in header clears all data and re-seeds
 - Works offline, no backend
 - Perfect for demos and prototyping
 
