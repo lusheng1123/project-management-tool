@@ -25,7 +25,8 @@ A standalone, single-page project management application built with vanilla HTML
 | **Requirements** | Demand intake with PSC approval workflow, capability-product filtering |
 | **Projects** | Project portfolio with 5-stage pipeline (Onboarding → Dev Phase 1 → Dev Phase 2 → Review → Live) |
 | **Controls** | Governance gates, reviews, and audits per project |
-| **Epics** | Work breakdown with RAG status, user stories, and team assignments |
+| **Epics** | Work breakdown with RAG status, user stories, and multi-select team assignments |
+| **User Stories** | Story management with acceptance criteria and epic linking |
 | **Risks** | RAID log with probability, impact, and mitigation tracking |
 | **Dependencies** | Risk-to-risk dependency mapping |
 | **Roadmap** | Calendar view (Month/Week/Day) showing products & projects on timeline |
@@ -36,9 +37,11 @@ A standalone, single-page project management application built with vanilla HTML
 - Dynamic modals generated from field definitions
 - Filtered dropdowns (e.g., products filtered by selected capability)
 - Many-to-many linking (capabilities ↔ products)
+- Multi-select developers from Resources list in Epic forms
 - RAG status visualization
 - 5-stage project pipeline with kanban board per product (📊 Pipeline button)
 - Roadmap calendar with Month/Week/Day views and color-coded bars
+- Projects linked inline on Product dashboard
 - 🔄 Reset button in header to clear data and re-seed
 - Stats dashboard per module
 - Toast notifications
@@ -56,7 +59,7 @@ project-management-tool/
 ├── seed-data.js            # DEV-only sample data seeder
 ├── data.js                 # Data service (DEV: localStorage, PROD: Xrm.WebApi)
 ├── components.js           # Reusable UI components (modals, tables, stats, filters)
-├── views.js                # 9 dashboard views (Resources → Roadmap) with full CRUD logic
+├── views.js                # 10 dashboard views (Resources → Stories) with full CRUD logic
 ├── app.js                  # App init, navigation, event delegation
 ├── docs/
 │   ├── REQUIREMENTS.md     # Full requirements specification

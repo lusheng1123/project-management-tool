@@ -23,7 +23,7 @@ The application requires **zero dependencies**, **no npm**, **no build step**, a
 
 ### 2.1 Modules
 
-The tool supports 9 modules (dashboards):
+The tool supports 10 modules (dashboards):
 
 | # | Module | Entity | Description |
 |---|--------|--------|-------------|
@@ -32,10 +32,11 @@ The tool supports 9 modules (dashboards):
 | F3 | Products | pm_product | Products and platform components with governance status and pipeline view |
 | F4 | Requirements | pm_requirement | Demand intake with PSC approval workflow and capability-product filtering |
 | F5 | Projects | pm_project | Project portfolio with 5-stage pipeline (Onboarding → Dev Phase 1 → Dev Phase 2 → Review → Live) |
-| F6 | Epics | pm_epic | Work breakdown with RAG status, user stories, team assignments, Jira links |
-| F7 | Risks | pm_risk | RAID log with project linkage and dependency mapping |
-| F8 | Dependencies | pm_dependency | Risk-to-risk dependency tracking |
-| F9 | Roadmap | (multi-entity) | Calendar view (Month/Week/Day) showing products & projects on timeline |
+| F6 | Epics | pm_epic | Work breakdown with RAG status, user stories, multi-select developer assignments, Jira links |
+| F7 | User Stories | pm_userstory | Story management with acceptance criteria and epic linking |
+| F8 | Risks | pm_risk | RAID log with project linkage and dependency mapping |
+| F9 | Dependencies | pm_dependency | Risk-to-risk dependency tracking |
+| F10 | Roadmap | (multi-entity) | Calendar view (Month/Week/Day) showing products & projects on timeline |
 
 ### 2.2 CRUD Operations
 
@@ -51,9 +52,12 @@ All 12 entities support full Create, Read, Update, Delete:
 | Feature | Description |
 |---------|-------------|
 | Dynamic Modals | Generated from field defs; supports text, number, date, email, choice, multiline, lookup |
+| Multi-Select Developers | Epic developer field uses checkbox list from IT Resources instead of free text |
+| User Story Dashboard | Dedicated tab for story management with epic linking and acceptance criteria |
 | 5-Stage Pipeline | Projects flow through Onboarding → Dev Phase 1 → Dev Phase 2 → Review → Live |
 | Product Pipeline View | 📊 Kanban board per product showing projects grouped by stage |
 | Roadmap Calendar | Month/Week/Day calendar views with color-coded project/product bars |
+| Products Column | Product dashboard shows linked projects inline with status and completion |
 | Filtered Dropdowns | Products filtered by selected capability; resources filtered by department |
 | Many-to-Many Linking | Capabilities ↔ Products via pm_capabilityproduct link table with checkbox UI |
 | RAG Visualization | Green/Amber/Red badges on epics based on pm_ragstatus |
