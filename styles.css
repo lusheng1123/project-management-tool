@@ -203,6 +203,8 @@ body {
 .badge-red { background: #fee2e2; color: #991b1b; }
 .badge-blue { background: #dbeafe; color: #1e40af; }
 .badge-gray { background: #f1f5f9; color: #475569; }
+.badge-purple { background: #e0e7ff; color: #3730a3; }
+.badge-pink { background: #fce7f3; color: #9d174d; }
 
 /* ======== BUTTONS ======== */
 .btn {

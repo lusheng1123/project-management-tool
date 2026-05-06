@@ -33,38 +33,38 @@ The file seed-data.js populates localStorage with realistic banking portfolio da
 
 ## Resources (30)
 
-| Name | Role | Department | Cost/Day | Status |
-|------|------|-----------|----------|--------|
-| Alice Tan | Product Owner | Business | $5,500 | Active |
-| Bob Lim | Senior Developer | IT | $4,800 | Active |
-| Carol Ng | Business Analyst | Business | $4,200 | Active |
-| David Chen | IT BA | IT | $4,000 | On Leave |
-| Eve Wong | Delivery Lead | IT | $5,200 | Active |
-| Frank Liu | Developer | IT | $3,800 | Active |
-| Grace Ho | Connecto PO | Business | $5,000 | Active |
-| Henry Tay | IT Lead | IT | $6,000 | Active |
-| Irene Lee | QA Lead | IT | $4,400 | Active |
-| Jack Tan | Developer | IT | $3,700 | Active |
-| Karen Lim | Architect | IT | $6,500 | Active |
-| Leo Wong | Developer | IT | $3,500 | Active |
-| Maya Singh | Business Analyst | Business | $4,100 | Active |
-| Nick Goh | DevOps | IT | $4,600 | Active |
-| Olivia Chan | Product Owner | Business | $5,300 | Active |
-| Pete Ng | Developer | IT | $3,400 | Active |
-| Queenie Teo | UX Designer | IT | $4,300 | Active |
-| Raj Kumar | Senior Developer | IT | $5,000 | Active |
-| Sara Liew | Scrum Master | IT | $4,700 | Active |
-| Tom Phua | Developer | IT | $3,600 | Active |
-| Uma Devi | QA Engineer | IT | $3,900 | Active |
-| Victor Ang | Security Lead | IT | $6,200 | Active |
-| Wendy Koh | Compliance Officer | Business | $4,500 | Active |
-| Xander Chua | Developer | IT | $3,300 | Active |
-| Yuki Tanaka | Data Analyst | IT | $4,200 | Active |
-| Zack Hamzah | Developer | IT | $3,200 | Active |
-| Amy Yeo | Business Analyst | Business | $4,000 | Active |
-| Ben Kwan | DevOps | IT | $4,500 | On Leave |
-| Cindy Fang | QA Engineer | IT | $3,800 | Active |
-| Danial Rauf | Architect | IT | $6,700 | Active |
+| Name | Role | Department | Team | Cost/Day | Status |
+|------|------|-----------|------|----------|--------|
+| Alice Tan | Product Owner | Business | Business | $5,500 | Active |
+| Bob Lim | Senior Developer | IT | Delta | $4,800 | Active |
+| Carol Ng | Business Analyst | Business | Business | $4,200 | Active |
+| David Chen | IT BA | IT | Gamma | $4,000 | On Leave |
+| Eve Wong | Delivery Lead | IT | Delta | $5,200 | Active |
+| Frank Liu | Developer | IT | Alpha | $3,800 | Active |
+| Grace Ho | Connecto PO | Business | Business | $5,000 | Active |
+| Henry Tay | IT Lead | IT | Delta | $6,000 | Active |
+| Irene Lee | QA Lead | IT | Gamma | $4,400 | Active |
+| Jack Tan | Developer | IT | Alpha | $3,700 | Active |
+| Karen Lim | Architect | IT | Delta | $6,500 | Active |
+| Leo Wong | Developer | IT | Alpha | $3,500 | Active |
+| Maya Singh | Business Analyst | Business | Business | $4,100 | Active |
+| Nick Goh | DevOps | IT | Platform | $4,600 | Active |
+| Olivia Chan | Product Owner | Business | Business | $5,300 | Active |
+| Pete Ng | Developer | IT | Alpha | $3,400 | Active |
+| Queenie Teo | UX Designer | IT | Beta | $4,300 | Active |
+| Raj Kumar | Senior Developer | IT | Beta | $5,000 | Active |
+| Sara Liew | Scrum Master | IT | Gamma | $4,700 | Active |
+| Tom Phua | Developer | IT | Beta | $3,600 | Active |
+| Uma Devi | QA Engineer | IT | Gamma | $3,900 | Active |
+| Victor Ang | Security Lead | IT | Delta | $6,200 | Active |
+| Wendy Koh | Compliance Officer | Business | Business | $4,500 | Active |
+| Xander Chua | Developer | IT | Beta | $3,300 | Active |
+| Yuki Tanaka | Data Analyst | IT | Platform | $4,200 | Active |
+| Zack Hamzah | Developer | IT | Beta | $3,200 | Active |
+| Amy Yeo | Business Analyst | Business | Business | $4,000 | Active |
+| Ben Kwan | DevOps | IT | Platform | $4,500 | On Leave |
+| Cindy Fang | QA Engineer | IT | Gamma | $3,800 | Active |
+| Danial Rauf | Architect | IT | Delta | $6,700 | Active |
 
 ## Capabilities (8)
 

@@ -19,7 +19,7 @@ class Views {
       case 'dependency': container.innerHTML = await this.dependency(); break;
       case 'roadmap': container.innerHTML = await this.roadmap(); break;
       case 'userstory': container.innerHTML = await this.userstory(); break;
-      default: container.innerHTML = await this.resource();
+      default: container.innerHTML = await this.product();
     }
   }
 
@@ -55,6 +55,7 @@ class Views {
       { field: 'pm_name', label: 'Name' },
       { field: 'pm_role', label: 'Role' },
       { field: 'pm_department', label: 'Department' },
+      { field: 'pm_team', label: 'Team', format: 'badge' },
       { field: 'pm_status', label: 'Status', format: 'badge' },
       { field: 'pm_cost', label: 'Cost' },
       { field: 'pm_joineddate', label: 'Joined Date' }
@@ -418,6 +419,7 @@ class Views {
     const data = await ds.getAll('pm_requirement');
     const capabilities = await ds.getAll('pm_capability');
     const products = await ds.getAll('pm_product');
+    const projects = await ds.getAll('pm_project');
 
     const statsHtml = Components.renderStats([
       { value: data.length, label: 'Requirements' },
@@ -428,8 +430,8 @@ class Views {
 
     let rows = '';
     for (const req of data) {
-      const capName = capabilities.find(c => c.id === req.pm_capabilityid)?.pm_name || '—';
       const prodName = products.find(p => p.id === req.pm_productname)?.pm_name || '—';
+      const projName = projects.find(p => p.id === req.pm_projectname)?.pm_name || '—';
       const pscBadge = req.pm_pscapprovalrequired === 'Yes'
         ? `<span class="badge ${Components._getBadgeClass(req.pm_pscapprovalstatus)}">${req.pm_pscapprovalstatus}</span>`
         : '<span class="badge badge-gray">N/A</span>';
@@ -437,7 +439,7 @@ class Views {
       rows += `
         <tr>
           <td>${req.pm_detail}</td>
-          <td>${capName}</td>
+          <td>${projName}</td>
           <td>${prodName}</td>
           <td><span class="badge ${Components._getBadgeClass(req.pm_status)}">${req.pm_status}</span></td>
           <td>${pscBadge}</td>
@@ -455,10 +457,10 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newRequirement()">+ New Requirement</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
-      <div class="filter-bar">${Components.renderSearchBar('Search requirements, capabilities, products...')}</div>
+      <div class="filter-bar">${Components.renderSearchBar('Search requirements, projects, products...')}</div>
       <div id="tableArea">${data.length === 0 ? '<div class="empty-state">No requirements found.</div>' : `
         <table class="data-table">
-          <thead><tr><th>Detail</th><th>Capability</th><th>Product</th><th>Status</th><th>PSC Approval</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Detail</th><th>Project</th><th>Product</th><th>Status</th><th>PSC Approval</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
       `}</div>

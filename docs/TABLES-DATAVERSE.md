@@ -10,10 +10,14 @@ This document maps each of the 12 entities from `models.js` to Dataverse tables.
 |---|---|---|---|---|
 | Resource ID | pm_resourceid | Primary Key (GUID) | Auto | |
 | Name | pm_name | Single Line of Text (150) | Yes | |
+| Role | pm_role | Single Line of Text (100) | Yes | |
+| Department | pm_department | Choice | Yes | IT, Business |
+| Team | pm_team | Choice | No | Alpha, Beta, Gamma, Delta, Platform, Business |
 | Email | pm_email | Email (100) | No | |
-| Role | pm_role | Choice | Yes | Developer, Architect, PM, QA, Designer, DevOps, Other |
-| Manager | pm_manager | Lookup → pm_resource | No | Self-referencing lookup |
-| Avatar Initials | pm_avatarinitials | Single Line of Text (10) | No | |
+| Joined Date | pm_joineddate | Date Only | Yes | |
+| Leave Date | pm_leavedate | Date Only | No | |
+| Cost (Monthly) | pm_cost | Currency / Decimal | No | |
+| Status | pm_status | Choice | Yes | Active, Inactive, On Leave |
 
 ---
 

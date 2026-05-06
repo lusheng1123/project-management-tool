@@ -19,7 +19,7 @@ A standalone, single-page project management application built with vanilla HTML
 
 | Module | Description |
 |---|---|
-| **Resources** | Team member directory with roles and managers |
+| **Resources** | Team member directory with roles, departments, teams, and managers |
 | **Capabilities** | Business/technical capabilities with product linking (N:N) |
 | **Products** | Products and platform components |
 | **Requirements** | Demand intake with PSC approval workflow, capability-product filtering |

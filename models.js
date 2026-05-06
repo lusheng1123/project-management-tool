@@ -9,6 +9,7 @@ const MODELS = {
       { name: 'pm_name', label: 'Name', type: 'text', required: true },
       { name: 'pm_role', label: 'Role', type: 'text', required: true },
       { name: 'pm_department', label: 'Department', type: 'choice', choices: ['IT', 'Business'], required: true },
+      { name: 'pm_team', label: 'Team', type: 'choice', choices: ['Alpha', 'Beta', 'Gamma', 'Delta', 'Platform', 'Business'] },
       { name: 'pm_email', label: 'Email', type: 'email' },
       { name: 'pm_joineddate', label: 'Joined Date', type: 'date', required: true },
       { name: 'pm_leavedate', label: 'Leave Date', type: 'date' },

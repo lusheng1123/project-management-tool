@@ -9,19 +9,19 @@
   }
 
   const tabs = [
-    { id: 'resource', label: '👥 Resources', icon: '👥' },
-    { id: 'capability', label: '🎯 Capabilities', icon: '🎯' },
     { id: 'product', label: '📦 Products', icon: '📦' },
-    { id: 'requirement', label: '📋 Requirements', icon: '📋' },
     { id: 'project', label: '📁 Projects', icon: '📁' },
+    { id: 'requirement', label: '📋 Requirements', icon: '📋' },
     { id: 'epic', label: '⚡ Epics', icon: '⚡' },
+    { id: 'userstory', label: '📝 Stories', icon: '📝' },
     { id: 'risk', label: '⚠️ Risks', icon: '⚠️' },
     { id: 'dependency', label: '🔗 Dependencies', icon: '🔗' },
+    { id: 'capability', label: '🎯 Capabilities', icon: '🎯' },
     { id: 'roadmap', label: '🗓️ Roadmap', icon: '🗓️' },
-    { id: 'userstory', label: '📝 Stories', icon: '📝' }
+    { id: 'resource', label: '👥 Resources', icon: '👥' }
   ];
 
-  let currentTab = 'resource';
+  let currentTab = 'product';
 
   // Build navigation
   function renderNav() {
