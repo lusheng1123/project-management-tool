@@ -1085,10 +1085,12 @@ class Views {
 
     // Determine state from stored or default
     if (!window._roadmapState) {
-      window._roadmapState = { view: 'month', currentDate: new Date().toISOString().slice(0, 7) + '-01' };
+      const now = new Date();
+      window._roadmapState = { view: 'month', currentDate: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01` };
     }
     const state = window._roadmapState;
-    const currentDate = new Date(state.currentDate + 'T00:00:00');
+    const [y, m, d] = state.currentDate.split('-').map(Number);
+    const currentDate = new Date(y, m - 1, d);
 
     // Build timeline items from products and projects
     const items = [];
@@ -1131,11 +1133,12 @@ class Views {
     const noDateProjects = projects.filter(p => !p.pm_startdate && !p.pm_targetdeliverydate);
 
     // Stats
+    const today = new Date();
     const statsHtml = Components.renderStats([
       { value: items.length, label: 'On Roadmap' },
       { value: items.filter(i => i.type === 'product').length, label: 'Products' },
       { value: items.filter(i => i.type === 'project').length, label: 'Projects' },
-      { value: items.filter(i => new Date(i.end) < new Date() && i.status !== 'Completed' && i.status !== 'Approved').length, label: 'Overdue' }
+      { value: items.filter(i => { const [ey, em, ed] = (i.end || '').split('-').map(Number); const endDate = new Date(ey, (em || 1) - 1, ed || 1); return endDate < today && i.status !== 'Live' && i.status !== 'Approved'; }).length, label: 'Overdue' }
     ]);
 
     // View toggle
@@ -1228,9 +1231,10 @@ class Views {
     }
 
     // Day cells
+    const today = new Date();
     for (let d = 1; d <= lastDay.getDate(); d++) {
       const cellDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-      const isToday = cellDate === new Date().toISOString().slice(0, 10);
+      const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
       const isWeekend = new Date(year, month, d).getDay() === 0 || new Date(year, month, d).getDay() === 6;
 
       // Find items that span this day
@@ -1383,30 +1387,33 @@ class Views {
   // Roadmap navigation
   static _roadmapPrev() {
     const state = window._roadmapState;
-    const d = new Date(state.currentDate + 'T00:00:00');
+    const [y, m, d] = state.currentDate.split('-').map(Number);
+    const dt = new Date(y, m - 1, d);
     switch (state.view) {
-      case 'month': d.setMonth(d.getMonth() - 1); d.setDate(1); break;
-      case 'week': d.setDate(d.getDate() - 7); break;
-      case 'day': d.setDate(d.getDate() - 1); break;
+      case 'month': dt.setMonth(dt.getMonth() - 1); dt.setDate(1); break;
+      case 'week': dt.setDate(dt.getDate() - 7); break;
+      case 'day': dt.setDate(dt.getDate() - 1); break;
     }
-    state.currentDate = d.toISOString().slice(0, 10);
+    state.currentDate = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
     Views.render('roadmap');
   }
 
   static _roadmapNext() {
     const state = window._roadmapState;
-    const d = new Date(state.currentDate + 'T00:00:00');
+    const [y, m, d] = state.currentDate.split('-').map(Number);
+    const dt = new Date(y, m - 1, d);
     switch (state.view) {
-      case 'month': d.setMonth(d.getMonth() + 1); d.setDate(1); break;
-      case 'week': d.setDate(d.getDate() + 7); break;
-      case 'day': d.setDate(d.getDate() + 1); break;
+      case 'month': dt.setMonth(dt.getMonth() + 1); dt.setDate(1); break;
+      case 'week': dt.setDate(dt.getDate() + 7); break;
+      case 'day': dt.setDate(dt.getDate() + 1); break;
     }
-    state.currentDate = d.toISOString().slice(0, 10);
+    state.currentDate = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
     Views.render('roadmap');
   }
 
   static _roadmapToday() {
-    window._roadmapState.currentDate = new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    window._roadmapState.currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     Views.render('roadmap');
   }
 
