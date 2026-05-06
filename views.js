@@ -259,6 +259,7 @@ class Views {
           <td>${prod.pm_contact || '—'}</td>
           <td class="actions-cell">
             <button class="btn-sm btn-edit" onclick="Views._editProduct('${prod.id}')">✏️ Edit</button>
+            <button class="btn-sm btn-link" onclick="Views._viewProductPipeline('${prod.id}')">📊 Pipeline</button>
             <button class="btn-sm btn-delete" onclick="Views._deleteProduct('${prod.id}')">🗑️</button>
           </td>
         </tr>
@@ -320,6 +321,75 @@ class Views {
       Components.toast('Product deleted!');
       Views.render('product');
     }
+  }
+
+  static async _viewProductPipeline(productId) {
+    const product = await ds.getById('pm_product', productId);
+    const allProjects = await ds.getAll('pm_project');
+    const projects = allProjects.filter(p => p.pm_productname === productId);
+
+    const stages = ['Onboarding', 'Development Phase 1', 'Development Phase 2', 'Review', 'Live'];
+    const stageColors = {
+      'Onboarding': 'pipeline-amber',
+      'Development Phase 1': 'pipeline-blue',
+      'Development Phase 2': 'pipeline-blue',
+      'Review': 'pipeline-amber',
+      'Live': 'pipeline-green'
+    };
+
+    const stageIcons = {
+      'Onboarding': '🚀',
+      'Development Phase 1': '💻',
+      'Development Phase 2': '⚙️',
+      'Review': '🔍',
+      'Live': '✅'
+    };
+
+    let columnsHtml = '';
+    for (const stage of stages) {
+      const stageProjects = projects.filter(p => p.pm_status === stage);
+      const count = stageProjects.length;
+
+      let cardsHtml = '';
+      if (stageProjects.length === 0) {
+        cardsHtml = '<div class="pipeline-card-empty">—</div>';
+      } else {
+        cardsHtml = stageProjects.map(p => `
+          <div class="pipeline-card ${stageColors[stage]}" onclick="Views._editProject('${p.id}'); Components.modal.close();">
+            <div class="pipeline-card-name">${p.pm_name}</div>
+            <div class="pipeline-card-meta">
+              <span>${p.pm_overallcompletion || 0}% done</span>
+              <span>${p.pm_startdate || '?'} → ${p.pm_targetdeliverydate || '?'}</span>
+            </div>
+            ${p.pm_priority ? `<div class="pipeline-card-priority">⚡ ${p.pm_priority}</div>` : ''}
+          </div>
+        `).join('');
+      }
+
+      columnsHtml += `
+        <div class="pipeline-column">
+          <div class="pipeline-column-header ${stageColors[stage]}">
+            <span>${stageIcons[stage]} ${stage}</span>
+            <span class="pipeline-count">${count}</span>
+          </div>
+          <div class="pipeline-column-body">${cardsHtml}</div>
+        </div>
+      `;
+    }
+
+    Components.modal.open({
+      title: `📦 Pipeline: ${product.pm_name}`,
+      fields: [],
+      extraContent: `
+        <div class="detail-section">
+          <p><strong>Journey:</strong> ${product.pm_journeyname || '—'} | <strong>Short:</strong> ${product.pm_shortname || '—'}</p>
+          <p><strong>Governance:</strong> <span class="badge ${Components._getBadgeClass(product.pm_governancestatus)}">${product.pm_governancestatus || 'N/A'}</span> | <strong>Contact:</strong> ${product.pm_contact || '—'}</p>
+          <p><strong>Dates:</strong> ${product.pm_startdate || '—'} → ${product.pm_targetdate || '—'}</p>
+        </div>
+        <div class="pipeline-board">${columnsHtml}</div>
+      `,
+      onSave: () => Components.modal.close()
+    });
   }
 
   // ========================================
@@ -1185,7 +1255,7 @@ class Views {
         <div class="calendar-cell-num">${d}</div>
         <div class="calendar-cell-items">
           ${dayItemBars.map(b => {
-            const label = b.isFirst ? `<span class="roadmap-bar-label">${item.type === 'product' ? '📦' : '📁'} ${b.item.name.substring(0, 15)}</span>` : '';
+            const label = b.isFirst ? `<span class="roadmap-bar-label">${b.item.type === 'product' ? '📦' : '📁'} ${b.item.name.substring(0, 15)}</span>` : '';
             return `<div class="roadmap-bar ${b.cls} ${b.isFirst ? 'roadmap-bar-first' : ''} ${b.isLast ? 'roadmap-bar-last' : ''}" title="${b.item.name} (${b.item.type})" onclick="Views._roadmapItemDetail('${b.item.id}', '${b.item.type}')">${label}</div>`;
           }).join('')}
         </div>
@@ -1303,10 +1373,10 @@ class Views {
 
   static _getRoadmapItemClass(item) {
     const st = item.status || '';
-    if (st === 'Completed' || st === 'Approved') return 'badge-green';
-    if (st === 'In Progress' || st === 'Active') return 'badge-blue';
-    if (st === 'On Hold' || st === 'Pending') return 'badge-amber';
-    if (st === 'Not Started' || st === 'Rejected' || st === 'N/A') return 'badge-gray';
+    if (st === 'Live' || st === 'Approved') return 'badge-green';
+    if (st === 'Development Phase 1' || st === 'Development Phase 2') return 'badge-blue';
+    if (st === 'Onboarding' || st === 'Review' || st === 'Pending') return 'badge-amber';
+    if (st === 'Rejected' || st === 'N/A') return 'badge-gray';
     return 'badge-blue';
   }
 
@@ -1315,7 +1385,7 @@ class Views {
     const state = window._roadmapState;
     const d = new Date(state.currentDate + 'T00:00:00');
     switch (state.view) {
-      case 'month': d.setMonth(d.getMonth() - 1); break;
+      case 'month': d.setMonth(d.getMonth() - 1); d.setDate(1); break;
       case 'week': d.setDate(d.getDate() - 7); break;
       case 'day': d.setDate(d.getDate() - 1); break;
     }
@@ -1327,7 +1397,7 @@ class Views {
     const state = window._roadmapState;
     const d = new Date(state.currentDate + 'T00:00:00');
     switch (state.view) {
-      case 'month': d.setMonth(d.getMonth() + 1); break;
+      case 'month': d.setMonth(d.getMonth() + 1); d.setDate(1); break;
       case 'week': d.setDate(d.getDate() + 7); break;
       case 'day': d.setDate(d.getDate() + 1); break;
     }

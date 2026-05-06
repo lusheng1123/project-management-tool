@@ -475,7 +475,108 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ======== ROADMAP / CALENDAR ======== */
+/* ======== PIPELINE BOARD ======== */
+.pipeline-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+  min-width: 750px;
+}
+
+.pipeline-column {
+  background: var(--bg);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.pipeline-column-header {
+  padding: 10px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pipeline-column-header.pipeline-green { background: #d1fae5; color: #065f46; }
+.pipeline-column-header.pipeline-blue { background: #dbeafe; color: #1e40af; }
+.pipeline-column-header.pipeline-amber { background: #fef3c7; color: #92400e; }
+
+.pipeline-count {
+  background: rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+}
+
+.pipeline-column-body {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.pipeline-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--primary);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.pipeline-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.pipeline-card.pipeline-green { border-left-color: var(--green); }
+.pipeline-card.pipeline-blue { border-left-color: var(--blue); }
+.pipeline-card.pipeline-amber { border-left-color: var(--amber); }
+
+.pipeline-card-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.pipeline-card-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.pipeline-card-priority {
+  font-size: 0.7rem;
+  color: var(--amber);
+  font-weight: 600;
+}
+
+.pipeline-card-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  padding: 16px;
+}
+
+@media (max-width: 768px) {
+  .pipeline-board {
+    grid-template-columns: 1fr;
+    min-width: auto;
+    gap: 8px;
+  }
+}
 .roadmap-controls {
   display: flex;
   align-items: center;

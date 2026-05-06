@@ -73,7 +73,7 @@ const MODELS = {
       { name: 'pm_productname', label: 'Product', type: 'lookup', target: 'pm_product' },
       { name: 'pm_startdate', label: 'Start Date', type: 'date' },
       { name: 'pm_targetdeliverydate', label: 'Target Delivery Date', type: 'date' },
-      { name: 'pm_status', label: 'Project Status', type: 'choice', choices: ['Not Started', 'In Progress', 'Completed', 'On Hold'], required: true },
+      { name: 'pm_status', label: 'Project Status', type: 'choice', choices: ['Onboarding', 'Development Phase 1', 'Development Phase 2', 'Review', 'Live'], required: true },
       { name: 'pm_estimateeffort', label: 'Estimate Effort (days)', type: 'number' },
       { name: 'pm_overallcompletion', label: 'Overall Completion (%)', type: 'number', min: 0, max: 100 },
       { name: 'pm_enhancementtype', label: 'Enhancement Type', type: 'choice', choices: ['New Integration', 'BAU Enhancement'] },

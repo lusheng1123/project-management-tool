@@ -150,9 +150,9 @@ class Components {
 
   static _getBadgeClass(val) {
     const v = (val || '').toLowerCase();
-    if (['active', 'approved', 'completed', 'linked', 'new', 'g'].includes(v)) return 'badge-green';
-    if (['in progress', 'prioritized', 'pending', 'on leave', 'a'].includes(v)) return 'badge-amber';
-    if (['inactive', 'rejected', 'on hold', 'critical', 'r', 'not started'].includes(v)) return 'badge-red';
+    if (['active', 'approved', 'completed', 'linked', 'new', 'live', 'g'].includes(v)) return 'badge-green';
+    if (['in progress', 'prioritized', 'pending', 'on leave', 'onboarding', 'review', 'a'].includes(v)) return 'badge-amber';
+    if (['inactive', 'rejected', 'on hold', 'critical', 'r', 'development phase 1', 'development phase 2'].includes(v)) return 'badge-blue';
     if (['medium', 'n/a'].includes(v)) return 'badge-gray';
     return 'badge-blue';
   }

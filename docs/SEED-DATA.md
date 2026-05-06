@@ -98,12 +98,12 @@ The file seed-data.js populates localStorage with realistic banking portfolio da
 
 | Project | Product | Status | Effort | Complete | Priority | Quarter |
 |---------|---------|--------|--------|----------|----------|--------|
-| TradeFlow v2.0 Redesign | TradeFlow Pro | In Progress | 180d | 65% | High | 2025/Q2 |
-| Payment Gateway Upgrade | PayGate | In Progress | 120d | 40% | Medium | 2025/Q3 |
-| Onboarding Digitalization | Onboard360 | Not Started | 220d | 0% | Critical | 2025/Q3 |
-| Fraud Detection Engine v1 | FraudShield | Not Started | 250d | 0% | Critical | 2025/Q4 |
-| WealthWise Mobile App | WealthWise | Not Started | 300d | 0% | High | 2025/Q4 |
-| MAS 610 Reporting | RegReport | In Progress | 90d | 55% | High | 2025/Q2 |
+| TradeFlow v2.0 Redesign | TradeFlow Pro | Development Phase 2 | 180d | 65% | High | 2025/Q2 |
+| Payment Gateway Upgrade | PayGate | Development Phase 1 | 120d | 40% | Medium | 2025/Q3 |
+| Onboarding Digitalization | Onboard360 | Onboarding | 220d | 5% | Critical | 2025/Q3 |
+| Fraud Detection Engine v1 | FraudShield | Onboarding | 250d | 10% | Critical | 2025/Q4 |
+| WealthWise Mobile App | WealthWise | Onboarding | 300d | 0% | High | 2025/Q4 |
+| MAS 610 Reporting | RegReport | Review | 90d | 55% | High | 2025/Q2 |
 
 ## Requirements (20) — with PSC approval tracking
 

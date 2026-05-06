@@ -81,7 +81,7 @@ This document maps each of the 12 entities from `models.js` to Dataverse tables.
 | Description | pm_description | Multiple Lines of Text (4000) | No | |
 | Start Date | pm_startdate | Date Only | No | |
 | End Date | pm_enddate | Date Only | No | |
-| Status | pm_status | Choice | Yes | Not Started, In Progress, On Hold, Completed, Cancelled |
+| Status | pm_status | Choice | Yes | Onboarding, Development Phase 1, Development Phase 2, Review, Live |
 | Project Manager | pm_projectmanager | Lookup → pm_resource | Yes | |
 | Lead Developer | pm_leaddeveloper | Lookup → pm_resource | No | |
 
