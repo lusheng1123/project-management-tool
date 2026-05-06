@@ -1,0 +1,489 @@
+/* ============================================================
+   styles.css — Project Management Tool Styling
+   ============================================================ */
+
+:root {
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  --primary-dark: #3730a3;
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --gray: #94a3b8;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ======== HEADER ======== */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header h1 {
+  font-size: 1.3rem;
+  color: var(--primary-dark);
+  white-space: nowrap;
+}
+
+.app-header .badge-mode {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.mode-dev { background: #dbeafe; color: #1e40af; }
+.mode-prod { background: #d1fae5; color: #065f46; }
+
+/* ======== NAVIGATION ======== */
+.tab-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 60px;
+  z-index: 99;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 18px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tab-btn:hover { color: var(--primary); background: var(--bg); }
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+}
+
+/* ======== MAIN CONTENT ======== */
+.main-content {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ======== DASHBOARD HEADER ======== */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.dashboard-header h2 {
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+/* ======== STATS ROW ======== */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--surface);
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ======== DATA TABLE ======== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.data-table th {
+  background: var(--bg);
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border);
+}
+
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  vertical-align: top;
+}
+
+.data-table tr:hover { background: #f8fafc; }
+.data-table tr:last-child td { border-bottom: none; }
+
+.actions-cell {
+  white-space: nowrap;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ======== BADGES ======== */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-green { background: #d1fae5; color: #065f46; }
+.badge-amber { background: #fef3c7; color: #92400e; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-blue { background: #dbeafe; color: #1e40af; }
+.badge-gray { background: #f1f5f9; color: #475569; }
+
+/* ======== BUTTONS ======== */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover { background: var(--primary-dark); }
+
+.btn-save {
+  background: var(--green);
+  color: white;
+}
+
+.btn-save:hover { opacity: 0.9; }
+
+.btn-cancel {
+  background: var(--gray);
+  color: white;
+}
+
+.btn-delete {
+  background: var(--red);
+  color: white;
+}
+
+.btn-reset {
+  background: var(--bg);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.btn-edit { background: #dbeafe; color: #1e40af; }
+.btn-edit:hover { background: #bfdbfe; }
+.btn-link { background: #e0e7ff; color: #3730a3; }
+.btn-link:hover { background: #c7d2fe; }
+.btn-delete { background: #fee2e2; color: #991b1b; }
+.btn-delete:hover { background: #fecaca; }
+
+/* ======== MODAL ======== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.modal-header h3 { font-size: 1.1rem; }
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.modal-close:hover { background: var(--bg); }
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 14px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.modal-body label:first-child { margin-top: 0; }
+
+.modal-body input,
+.modal-body select,
+.modal-body textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.modal-body input:focus,
+.modal-body select:focus,
+.modal-body textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+}
+
+.modal-body textarea { resize: vertical; min-height: 60px; }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.modal-footer .btn-delete { margin-right: auto; }
+
+/* ======== CHECKBOX GROUP ======== */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  margin: 0 !important;
+  color: var(--text) !important;
+}
+
+.checkbox-label input { width: auto !important; }
+
+/* ======== FILTER BAR ======== */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.filter-bar input:focus,
+.filter-bar select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* ======== EMPTY STATE ======== */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* ======== DETAIL SECTION ======== */
+.detail-section h4 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+
+.detail-section ul {
+  padding-left: 20px;
+}
+
+.detail-section li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+/* ======== TOAST ======== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 2000;
+  animation: slideUp 0.3s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.toast-success { background: var(--green); }
+.toast-error { background: var(--red); }
+
+/* ======== LOADING ======== */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+
+/* ======== ANIMATIONS ======== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 768px) {
+  .app-header { padding: 10px 16px; }
+  .tab-nav { padding: 0 8px; overflow-x: auto; }
+  .tab-btn { padding: 10px 12px; font-size: 0.75rem; }
+  .main-content { padding: 16px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .dashboard-header { flex-direction: column; align-items: flex-start; }
+  .data-table { font-size: 0.8rem; }
+  .data-table th, .data-table td { padding: 8px 10px; }
+  .modal { max-width: 95vw; }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Management Tool</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="app-header">
+<h1>Project Management Tool</h1>
+<span class="badge-mode mode-dev" id="modeBadge">DEV</span>
+</header>
+<nav class="tab-nav" id="tabNav"></nav>
+<main class="main-content" id="mainContent"><div class="loading">Loading...</div></main>
+<script src="models.js"></script>
+<!-- DEV ONLY: seed-data.js populates localStorage with mock data. DO NOT include in PROD migration. -->
+<script src="seed-data.js"></script>
+<script src="data.js"></script>
+<script src="components.js"></script>
+<script src="views.js"></script>
+<script src="app.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){var b=document.getElementById("modeBadge");if(typeof APP_CONFIG!=="undefined"&&APP_CONFIG.MODE==="PROD"){b.textContent="PROD";b.className="badge-mode mode-prod"}});</script>
+</body>
+</html>
