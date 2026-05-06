@@ -18,6 +18,7 @@ class Views {
       case 'risk': container.innerHTML = await this.risk(); break;
       case 'dependency': container.innerHTML = await this.dependency(); break;
       case 'roadmap': container.innerHTML = await this.roadmap(); break;
+      case 'userstory': container.innerHTML = await this.userstory(); break;
       default: container.innerHTML = await this.resource();
     }
   }
@@ -805,7 +806,7 @@ class Views {
 
     Components.modal.open({
       title: 'New Epic',
-      fields: getFields('pm_epic').filter(f => !f.name.startsWith('pm_projectname') && !f.name.startsWith('pm_businessba') && !f.name.startsWith('pm_itba')),
+      fields: getFields('pm_epic').filter(f => !f.name.startsWith('pm_projectname') && !f.name.startsWith('pm_businessba') && !f.name.startsWith('pm_itba') && f.name !== 'pm_developers'),
       extraContent: `
         <label>Project</label>
         <select id="epicProject" data-extra>
@@ -822,11 +823,17 @@ class Views {
           <option value="">None</option>
           ${resources.filter(r => r.pm_department === 'IT').map(r => `<option value="${r.id}">${r.pm_name} (${r.pm_role})</option>`).join('')}
         </select>
+        <label>Developers</label>
+        <div class="checkbox-group" id="epicDevelopers">
+          ${resources.filter(r => r.pm_department === 'IT').map(r => `<label class="checkbox-label"><input type="checkbox" value="${r.pm_name}"> ${r.pm_name} (${r.pm_role})</label>`).join('')}
+        </div>
       `,
       onSave: async (formData) => {
         formData.pm_projectname = document.getElementById('epicProject').value;
         formData.pm_businessba = document.getElementById('epicBusinessBA').value;
         formData.pm_itba = document.getElementById('epicITBA').value;
+        const devChecks = document.querySelectorAll('#epicDevelopers input:checked');
+        formData.pm_developers = Array.from(devChecks).map(c => c.value).join(', ');
         await ds.create('pm_epic', formData);
         Components.modal.close();
         Components.toast('Epic created!');
@@ -839,10 +846,11 @@ class Views {
     const record = await ds.getById('pm_epic', id);
     const projects = await ds.getAll('pm_project');
     const resources = await ds.getAll('pm_resource');
+    const existingDevs = (record.pm_developers || '').split(',').map(s => s.trim());
 
     Components.modal.open({
       title: 'Edit Epic',
-      fields: getFields('pm_epic').filter(f => !f.name.startsWith('pm_projectname') && !f.name.startsWith('pm_businessba') && !f.name.startsWith('pm_itba')),
+      fields: getFields('pm_epic').filter(f => !f.name.startsWith('pm_projectname') && !f.name.startsWith('pm_businessba') && !f.name.startsWith('pm_itba') && f.name !== 'pm_developers'),
       data: record,
       extraContent: `
         <label>Project</label>
@@ -860,11 +868,17 @@ class Views {
           <option value="">None</option>
           ${resources.filter(r => r.pm_department === 'IT').map(r => `<option value="${r.id}" ${record.pm_itba === r.id ? 'selected' : ''}>${r.pm_name} (${r.pm_role})</option>`).join('')}
         </select>
+        <label>Developers</label>
+        <div class="checkbox-group" id="epicDevelopers">
+          ${resources.filter(r => r.pm_department === 'IT').map(r => `<label class="checkbox-label"><input type="checkbox" value="${r.pm_name}" ${existingDevs.includes(r.pm_name) ? 'checked' : ''}> ${r.pm_name} (${r.pm_role})</label>`).join('')}
+        </div>
       `,
       onSave: async (formData) => {
         formData.pm_projectname = document.getElementById('epicProject').value;
         formData.pm_businessba = document.getElementById('epicBusinessBA').value;
         formData.pm_itba = document.getElementById('epicITBA').value;
+        const devChecks = document.querySelectorAll('#epicDevelopers input:checked');
+        formData.pm_developers = Array.from(devChecks).map(c => c.value).join(', ');
         await ds.update('pm_epic', id, formData);
         Components.modal.close();
         Components.toast('Epic updated!');
@@ -1091,6 +1105,105 @@ class Views {
   }
 
   static async _deleteDependency(id) { if (confirm('Delete?')) { await ds.delete('pm_dependency', id); Components.toast('Deleted!'); Views.render('dependency'); } }
+
+  // ========================================
+  // 8.5 USER STORY DASHBOARD
+  // ========================================
+  static async userstory() {
+    const stories = await ds.getAll('pm_userstory');
+    const epics = await ds.getAll('pm_epic');
+
+    const statsHtml = Components.renderStats([
+      { value: stories.length, label: 'Stories' },
+      { value: [...new Set(stories.map(s => s.pm_epicid).filter(Boolean))].length, label: 'Epics' },
+      { value: stories.filter(s => s.pm_acceptancecriteria).length, label: 'With AC' }
+    ]);
+
+    let rows = '';
+    for (const story of stories) {
+      const epic = epics.find(e => e.id === story.pm_epicid);
+      rows += `
+        <tr>
+          <td>${story.pm_detail}</td>
+          <td>${epic ? epic.pm_title : '—'}</td>
+          <td><small>${story.pm_acceptancecriteria || '—'}</small></td>
+          <td class="actions-cell">
+            <button class="btn-sm btn-edit" onclick="Views._editUserStory('${story.id}')">✏️ Edit</button>
+            <button class="btn-sm btn-delete" onclick="Views._deleteUserStory('${story.id}')">🗑️</button>
+          </td>
+        </tr>`;
+    }
+
+    return `
+      <div class="dashboard-header">
+        <h2>📝 User Stories</h2>
+        <button class="btn btn-primary" onclick="Views._newUserStory()">+ New Story</button>
+      </div>
+      <div class="stats-row">${statsHtml}</div>
+      ${stories.length === 0 ? '<div class="empty-state">No stories found.</div>' : `
+        <table class="data-table">
+          <thead><tr><th>Story</th><th>Epic</th><th>Acceptance Criteria</th><th>Actions</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`}`;
+  }
+
+  static async _newUserStory() {
+    const epics = await ds.getAll('pm_epic');
+    Components.modal.open({
+      title: 'New User Story',
+      fields: getFields('pm_userstory').filter(f => f.name !== 'pm_epicid'),
+      extraContent: `
+        <label>Epic</label>
+        <select id="storyEpic" data-extra>
+          <option value="">None</option>
+          ${epics.map(e => `<option value="${e.id}">${e.pm_title}</option>`).join('')}
+        </select>`,
+      onSave: async (formData) => {
+        formData.pm_epicid = document.getElementById('storyEpic').value;
+        await ds.create('pm_userstory', formData);
+        Components.modal.close();
+        Components.toast('Story created!');
+        Views.render('userstory');
+      }
+    });
+  }
+
+  static async _editUserStory(id) {
+    const record = await ds.getById('pm_userstory', id);
+    const epics = await ds.getAll('pm_epic');
+    Components.modal.open({
+      title: 'Edit User Story',
+      fields: getFields('pm_userstory').filter(f => f.name !== 'pm_epicid'),
+      data: record,
+      extraContent: `
+        <label>Epic</label>
+        <select id="storyEpic" data-extra>
+          <option value="">None</option>
+          ${epics.map(e => `<option value="${e.id}" ${record.pm_epicid === e.id ? 'selected' : ''}>${e.pm_title}</option>`).join('')}
+        </select>`,
+      onSave: async (formData) => {
+        formData.pm_epicid = document.getElementById('storyEpic').value;
+        await ds.update('pm_userstory', id, formData);
+        Components.modal.close();
+        Components.toast('Story updated!');
+        Views.render('userstory');
+      },
+      onDelete: async () => {
+        await ds.delete('pm_userstory', id);
+        Components.modal.close();
+        Components.toast('Story deleted!');
+        Views.render('userstory');
+      }
+    });
+  }
+
+  static async _deleteUserStory(id) {
+    if (confirm('Delete this story?')) {
+      await ds.delete('pm_userstory', id);
+      Components.toast('Story deleted!');
+      Views.render('userstory');
+    }
+  }
 
   // ========================================
   // 9. ROADMAP / CALENDAR VIEW

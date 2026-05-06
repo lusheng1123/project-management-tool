@@ -17,7 +17,8 @@
     { id: 'epic', label: '⚡ Epics', icon: '⚡' },
     { id: 'risk', label: '⚠️ Risks', icon: '⚠️' },
     { id: 'dependency', label: '🔗 Dependencies', icon: '🔗' },
-    { id: 'roadmap', label: '🗓️ Roadmap', icon: '🗓️' }
+    { id: 'roadmap', label: '🗓️ Roadmap', icon: '🗓️' },
+    { id: 'userstory', label: '📝 Stories', icon: '📝' }
   ];
 
   let currentTab = 'resource';
