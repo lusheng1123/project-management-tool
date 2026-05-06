@@ -396,6 +396,7 @@ class Views {
     Components.modal.open({
       title: `📦 Pipeline: ${product.pm_name}`,
       fields: [],
+      wide: true,
       extraContent: `
         <div class="detail-section">
           <p><strong>Journey:</strong> ${product.pm_journeyname || '—'} | <strong>Short:</strong> ${product.pm_shortname || '—'}</p>

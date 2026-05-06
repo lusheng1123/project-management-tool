@@ -8,7 +8,7 @@ class Components {
   static modal = {
     _overlay: null,
 
-    open({ title, fields, data, onSave, onDelete, extraContent }) {
+    open({ title, fields, data, onSave, onDelete, extraContent, wide }) {
       this.close();
       this._overlay = document.createElement('div');
       this._overlay.className = 'modal-overlay';
@@ -38,7 +38,7 @@ class Components {
       const extra = extraContent || '';
 
       this._overlay.innerHTML = `
-        <div class="modal">
+        <div class="modal${wide ? ' modal-wide' : ''}">
           <div class="modal-header">
             <h3>${title}</h3>
             <button class="modal-close" id="modalCloseBtn">✕</button>
