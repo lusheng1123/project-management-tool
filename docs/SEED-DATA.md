@@ -94,16 +94,22 @@ The file seed-data.js populates localStorage with realistic banking portfolio da
 | SupportHub | Customer Service | SH | Approved | Maya Singh | 2024-03-01 | 2025-04-30 |
 | RegInsight | Regulatory | RI | N/A | Wendy Koh | 2025-01-01 | 2025-09-30 |
 
-## Projects (6)
+## Projects (12)
 
 | Project | Product | Status | Effort | Complete | Priority | Quarter |
 |---------|---------|--------|--------|----------|----------|--------|
-| TradeFlow v2.0 Redesign | TradeFlow Pro | Development Phase 2 | 180d | 65% | High | 2025/Q2 |
-| Payment Gateway Upgrade | PayGate | Development Phase 1 | 120d | 40% | Medium | 2025/Q3 |
-| Onboarding Digitalization | Onboard360 | Onboarding | 220d | 5% | Critical | 2025/Q3 |
-| Fraud Detection Engine v1 | FraudShield | Onboarding | 250d | 10% | Critical | 2025/Q4 |
-| WealthWise Mobile App | WealthWise | Onboarding | 300d | 0% | High | 2025/Q4 |
-| MAS 610 Reporting | RegReport | Review | 90d | 55% | High | 2025/Q2 |
+| TradeFlow v2.0 Redesign | TradeFlow Pro | Live | 180d | 100% | High | 2024/Q3 |
+| Payment Gateway Upgrade | PayGate | Review | 120d | 85% | Medium | 2025/Q2 |
+| Onboarding Digitalization | Onboard360 | Dev Phase 2 | 220d | 60% | Critical | 2025/Q3 |
+| Fraud Detection Engine v1 | FraudShield | Dev Phase 1 | 250d | 35% | Critical | 2025/Q4 |
+| WealthWise Mobile App | WealthWise | Dev Phase 1 | 300d | 20% | High | 2026/Q1 |
+| MAS 610 Regulatory Reporting | RegReport | Live | 90d | 100% | High | 2024/Q4 |
+| TradeFlow Mobile App | TradeFlow Pro | Onboarding | 160d | 15% | High | 2026/Q2 |
+| Real-time Payment Engine | PayGate | Review | 140d | 88% | Critical | 2026/Q1 |
+| Credit Scoring AI | CreditEase | Dev Phase 1 | 200d | 28% | High | 2026/Q2 |
+| AI Chatbot v2 | SupportHub | Dev Phase 2 | 170d | 72% | Medium | 2026/Q1 |
+| Blockchain Settlement Network | SwiftConnect | Onboarding | 280d | 5% | Critical | 2026/Q2 |
+| Automated Compliance Engine | RegInsight | Dev Phase 1 | 190d | 22% | High | 2026/Q2 |
 
 ## Requirements (20) — with PSC approval tracking
 
