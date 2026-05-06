@@ -36,7 +36,9 @@ const MODELS = {
       { name: 'pm_journeyname', label: 'Journey Name', type: 'text' },
       { name: 'pm_shortname', label: 'Short Name', type: 'text' },
       { name: 'pm_governancestatus', label: 'Governance Status', type: 'choice', choices: ['Approved', 'Pending', 'Rejected', 'N/A'] },
-      { name: 'pm_contact', label: 'Contact', type: 'text' }
+      { name: 'pm_contact', label: 'Contact', type: 'text' },
+      { name: 'pm_startdate', label: 'Planned Start', type: 'date' },
+      { name: 'pm_targetdate', label: 'Target Launch', type: 'date' }
     ]
   },
 

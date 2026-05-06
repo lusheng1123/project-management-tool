@@ -81,18 +81,18 @@ The file seed-data.js populates localStorage with realistic banking portfolio da
 
 ## Products (10)
 
-| Product | Journey | Short | Governance | Contact |
-|---------|---------|-------|-----------|---------|
-| TradeFlow Pro | Trade Finance | TFP | Approved | Alice Tan |
-| PayGate | Payments | PG | Approved | Grace Ho |
-| Onboard360 | Onboarding | OB360 | Pending | Carol Ng |
-| RegReport | Regulatory | RR | Approved | Wendy Koh |
-| SwiftConnect | Payments | SC | Approved | Grace Ho |
-| FraudShield | Fraud Detection | FS | Approved | Victor Ang |
-| WealthWise | Wealth | WW | Pending | Olivia Chan |
-| CreditEase | Lending | CE | Approved | Alice Tan |
-| SupportHub | Customer Service | SH | Approved | Maya Singh |
-| RegInsight | Regulatory | RI | N/A | Wendy Koh |
+| Product | Journey | Short | Governance | Contact | Start | Target |
+|---------|---------|-------|-----------|---------|-------|--------|
+| TradeFlow Pro | Trade Finance | TFP | Approved | Alice Tan | 2024-06-01 | 2025-06-30 |
+| PayGate | Payments | PG | Approved | Grace Ho | 2024-09-01 | 2025-08-15 |
+| Onboard360 | Onboarding | OB360 | Pending | Carol Ng | 2025-03-01 | 2025-09-30 |
+| RegReport | Regulatory | RR | Approved | Wendy Koh | 2024-01-01 | 2025-05-30 |
+| SwiftConnect | Payments | SC | Approved | Grace Ho | 2024-07-01 | 2025-07-31 |
+| FraudShield | Fraud Detection | FS | Approved | Victor Ang | 2025-04-01 | 2025-10-31 |
+| WealthWise | Wealth | WW | Pending | Olivia Chan | 2025-05-01 | 2025-12-15 |
+| CreditEase | Lending | CE | Approved | Alice Tan | 2024-10-01 | 2025-11-30 |
+| SupportHub | Customer Service | SH | Approved | Maya Singh | 2024-03-01 | 2025-04-30 |
+| RegInsight | Regulatory | RI | N/A | Wendy Koh | 2025-01-01 | 2025-09-30 |
 
 ## Projects (6)
 

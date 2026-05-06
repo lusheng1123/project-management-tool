@@ -36,6 +36,8 @@ This document maps each of the 12 entities from `models.js` to Dataverse tables.
 | Name | pm_name | Single Line of Text (200) | Yes | |
 | Description | pm_description | Multiple Lines of Text (2000) | No | |
 | Status | pm_status | Choice | Yes | Active, In Development, Retired, Planning |
+| Planned Start | pm_startdate | Date Only | No | |
+| Target Launch | pm_targetdate | Date Only | No | |
 
 ---
 

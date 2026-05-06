@@ -475,6 +475,334 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
+/* ======== ROADMAP / CALENDAR ======== */
+.roadmap-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.roadmap-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.roadmap-nav-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  min-width: 200px;
+  text-align: center;
+  color: var(--text);
+}
+
+.roadmap-views {
+  display: flex;
+  gap: 4px;
+}
+
+.roadmap-legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-product { background: var(--blue); }
+.legend-project { background: var(--primary); }
+.legend-completed { background: var(--green); }
+.legend-inprogress { background: var(--blue); }
+.legend-pending { background: var(--amber); }
+
+/* Month calendar */
+.calendar-month {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--bg);
+  border-bottom: 2px solid var(--border);
+}
+
+.calendar-day-header {
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-cell {
+  min-height: 100px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 6px;
+  position: relative;
+}
+
+.calendar-cell:nth-child(7n) { border-right: none; }
+
+.calendar-cell-empty {
+  background: #fafbfc;
+}
+
+.calendar-cell-weekend {
+  background: #fafbfc;
+}
+
+.calendar-cell-today {
+  background: #eef2ff;
+}
+
+.calendar-cell-today .calendar-cell-num {
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-cell-num {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  padding: 2px 6px;
+}
+
+.calendar-cell-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+/* Roadmap bars */
+.roadmap-bar {
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  transition: opacity 0.15s;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.roadmap-bar:hover { opacity: 0.8; }
+
+.roadmap-bar-first { border-radius: 4px 0 0 4px; margin-left: 0; }
+.roadmap-bar-last { border-radius: 0 4px 4px 0; margin-right: 0; }
+.roadmap-bar-first.roadmap-bar-last { border-radius: 4px; }
+
+.roadmap-bar.badge-green { background: #d1fae5; border-left: 3px solid var(--green); }
+.roadmap-bar.badge-blue { background: #dbeafe; border-left: 3px solid var(--blue); }
+.roadmap-bar.badge-amber { background: #fef3c7; border-left: 3px solid var(--amber); }
+.roadmap-bar.badge-gray { background: #f1f5f9; border-left: 3px solid var(--gray); }
+
+.roadmap-bar-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Week calendar */
+.calendar-week {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.calendar-week-header {
+  display: grid;
+  grid-template-columns: 160px repeat(7, 1fr);
+  background: var(--bg);
+  border-bottom: 2px solid var(--border);
+}
+
+.calendar-week-day {
+  padding: 10px 4px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.calendar-week-today {
+  background: #eef2ff;
+}
+
+.calendar-week-date {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 2px;
+}
+
+.calendar-week-label {
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.calendar-week-body {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.calendar-week-row {
+  display: grid;
+  grid-template-columns: 160px repeat(7, 1fr);
+  border-bottom: 1px solid var(--border);
+  min-height: 40px;
+  align-items: center;
+}
+
+.calendar-week-row:last-child { border-bottom: none; }
+
+.calendar-week-cell {
+  padding: 2px 1px;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.roadmap-bar-week {
+  height: 16px;
+  width: 100%;
+}
+
+/* Day calendar */
+.calendar-day {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.calendar-day h3 {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+}
+
+.calendar-day-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calendar-day-item {
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--primary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.calendar-day-item:hover { background: var(--bg); }
+
+.calendar-day-item.badge-green { border-left-color: var(--green); }
+.calendar-day-item.badge-blue { border-left-color: var(--blue); }
+.calendar-day-item.badge-amber { border-left-color: var(--amber); }
+.calendar-day-item.badge-gray { border-left-color: var(--gray); }
+
+.calendar-day-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.calendar-day-item-icon { font-size: 1.2rem; }
+
+.calendar-day-item-dates {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-left: 30px;
+}
+
+/* No-dates section */
+.roadmap-nodates {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.roadmap-nodates h4 {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.roadmap-nodates-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.roadmap-nodate-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+/* Roadmap responsive */
+@media (max-width: 768px) {
+  .calendar-cell { min-height: 70px; padding: 3px; }
+  .calendar-cell-num { font-size: 0.7rem; }
+  .roadmap-bar { height: 14px; }
+  .roadmap-bar-label { font-size: 0.55rem; }
+  .calendar-week-header,
+  .calendar-week-row { grid-template-columns: 100px repeat(7, 1fr); }
+  .calendar-week-label { padding: 6px 8px; font-size: 0.7rem; }
+  .roadmap-controls { flex-direction: column; align-items: flex-start; }
+  .roadmap-nav-label { min-width: auto; }
+}
+
 /* ======== RESPONSIVE ======== */
 @media (max-width: 768px) {
   .app-header { padding: 10px 16px; }

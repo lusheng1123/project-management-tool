@@ -17,6 +17,7 @@ class Views {
       case 'epic': container.innerHTML = await this.epic(); break;
       case 'risk': container.innerHTML = await this.risk(); break;
       case 'dependency': container.innerHTML = await this.dependency(); break;
+      case 'roadmap': container.innerHTML = await this.roadmap(); break;
       default: container.innerHTML = await this.resource();
     }
   }
@@ -1003,4 +1004,381 @@ class Views {
   }
 
   static async _deleteDependency(id) { if (confirm('Delete?')) { await ds.delete('pm_dependency', id); Components.toast('Deleted!'); Views.render('dependency'); } }
+
+  // ========================================
+  // 9. ROADMAP / CALENDAR VIEW
+  // ========================================
+  static async roadmap() {
+    const products = await ds.getAll('pm_product');
+    const projects = await ds.getAll('pm_project');
+    const epics = await ds.getAll('pm_epic');
+
+    // Determine state from stored or default
+    if (!window._roadmapState) {
+      window._roadmapState = { view: 'month', currentDate: new Date().toISOString().slice(0, 7) + '-01' };
+    }
+    const state = window._roadmapState;
+    const currentDate = new Date(state.currentDate + 'T00:00:00');
+
+    // Build timeline items from products and projects
+    const items = [];
+
+    for (const p of products) {
+      if (p.pm_startdate || p.pm_targetdate) {
+        items.push({
+          id: p.id,
+          name: p.pm_name,
+          type: 'product',
+          shortName: p.pm_shortname || '',
+          status: p.pm_governancestatus || 'N/A',
+          start: p.pm_startdate || p.pm_targetdate,
+          end: p.pm_targetdate || p.pm_startdate,
+          contact: p.pm_contact || ''
+        });
+      }
+    }
+
+    for (const p of projects) {
+      if (p.pm_startdate || p.pm_targetdeliverydate) {
+        const projEpics = epics.filter(e => e.pm_projectname === p.id);
+        items.push({
+          id: p.id,
+          name: p.pm_name,
+          type: 'project',
+          status: p.pm_status || 'Not Started',
+          start: p.pm_startdate || p.pm_targetdeliverydate,
+          end: p.pm_targetdeliverydate || p.pm_startdate,
+          completion: p.pm_overallcompletion || 0,
+          priority: p.pm_priority || '',
+          productId: p.pm_productname || '',
+          epics: projEpics
+        });
+      }
+    }
+
+    // Items without dates
+    const noDateProducts = products.filter(p => !p.pm_startdate && !p.pm_targetdate);
+    const noDateProjects = projects.filter(p => !p.pm_startdate && !p.pm_targetdeliverydate);
+
+    // Stats
+    const statsHtml = Components.renderStats([
+      { value: items.length, label: 'On Roadmap' },
+      { value: items.filter(i => i.type === 'product').length, label: 'Products' },
+      { value: items.filter(i => i.type === 'project').length, label: 'Projects' },
+      { value: items.filter(i => new Date(i.end) < new Date() && i.status !== 'Completed' && i.status !== 'Approved').length, label: 'Overdue' }
+    ]);
+
+    // View toggle
+    const views = ['month', 'week', 'day'];
+    const viewToggle = views.map(v =>
+      `<button class="btn-sm ${state.view === v ? 'btn-primary' : 'btn-reset'}" onclick="Views._roadmapSetView('${v}')">${v.charAt(0).toUpperCase() + v.slice(1)}</button>`
+    ).join('');
+
+    // Navigation
+    const navLabel = Views._getRoadmapNavLabel(state.view, currentDate);
+
+    // Calendar body
+    let calendarHtml = '';
+    switch (state.view) {
+      case 'month': calendarHtml = Views._renderMonthCalendar(items, currentDate); break;
+      case 'week': calendarHtml = Views._renderWeekCalendar(items, currentDate); break;
+      case 'day': calendarHtml = Views._renderDayCalendar(items, currentDate); break;
+    }
+
+    // No-dates section
+    let noDateHtml = '';
+    const noDateItems = [...noDateProducts.map(p => ({ name: p.pm_name, type: 'Product' })), ...noDateProjects.map(p => ({ name: p.pm_name, type: 'Project' }))];
+    if (noDateItems.length > 0) {
+      noDateHtml = `
+        <div class="roadmap-nodates">
+          <h4>📌 Items Without Dates (${noDateItems.length})</h4>
+          <div class="roadmap-nodates-list">${noDateItems.map(i => `<span class="roadmap-nodate-item"><span class="badge badge-gray">${i.type}</span> ${i.name}</span>`).join('')}</div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="dashboard-header">
+        <h2>🗓️ Roadmap</h2>
+        <div class="roadmap-controls">
+          <div class="roadmap-nav">
+            <button class="btn-sm btn-reset" onclick="Views._roadmapPrev()">◀</button>
+            <span class="roadmap-nav-label">${navLabel}</span>
+            <button class="btn-sm btn-reset" onclick="Views._roadmapNext()">▶</button>
+            <button class="btn-sm btn-reset" onclick="Views._roadmapToday()">Today</button>
+          </div>
+          <div class="roadmap-views">${viewToggle}</div>
+        </div>
+      </div>
+      <div class="stats-row">${statsHtml}</div>
+      <div class="roadmap-legend">
+        <span class="legend-item"><span class="legend-dot legend-product"></span> Product</span>
+        <span class="legend-item"><span class="legend-dot legend-project"></span> Project</span>
+        <span class="legend-item"><span class="legend-dot legend-completed"></span> Completed</span>
+        <span class="legend-item"><span class="legend-dot legend-inprogress"></span> In Progress</span>
+        <span class="legend-item"><span class="legend-dot legend-pending"></span> Pending</span>
+      </div>
+      <div id="roadmapCalendar">${calendarHtml}</div>
+      ${noDateHtml}
+    `;
+  }
+
+  static _getRoadmapNavLabel(view, date) {
+    const m = date.toLocaleString('default', { month: 'long' });
+    const y = date.getFullYear();
+    switch (view) {
+      case 'month': return `${m} ${y}`;
+      case 'week': {
+        const start = new Date(date);
+        start.setDate(start.getDate() - start.getDay() + 1);
+        const end = new Date(start);
+        end.setDate(end.getDate() + 6);
+        return `${start.toLocaleString('default', { month: 'short', day: 'numeric' })} – ${end.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+      }
+      case 'day': return date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    }
+  }
+
+  static _renderMonthCalendar(items, date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startOffset = (firstDay.getDay() + 6) % 7; // Monday start
+
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    let html = `<div class="calendar-month"><div class="calendar-header">`;
+    html += dayNames.map(d => `<div class="calendar-day-header">${d}</div>`).join('');
+    html += `</div><div class="calendar-grid">`;
+
+    // Empty cells before first day
+    for (let i = 0; i < startOffset; i++) {
+      html += `<div class="calendar-cell calendar-cell-empty"></div>`;
+    }
+
+    // Day cells
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      const cellDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const isToday = cellDate === new Date().toISOString().slice(0, 10);
+      const isWeekend = new Date(year, month, d).getDay() === 0 || new Date(year, month, d).getDay() === 6;
+
+      // Find items that span this day
+      const dayItems = items.filter(item => {
+        if (!item.start || !item.end) return false;
+        const s = item.start.slice(0, 10);
+        const e = item.end.slice(0, 10);
+        return cellDate >= s && cellDate <= e;
+      });
+
+      // Determine first/last day for each item in this month view
+      const dayItemBars = dayItems.map((item, idx) => {
+        const s = item.start.slice(0, 10);
+        const e = item.end.slice(0, 10);
+        const isFirst = cellDate === s || (cellDate === `${year}-${String(month + 1).padStart(2, '0')}-01` && s < cellDate);
+        const isLast = cellDate === e || (cellDate === `${year}-${String(month + 1).padStart(2, '0')}-${String(lastDay.getDate()).padStart(2, '0')}` && e > cellDate);
+        const cls = Views._getRoadmapItemClass(item);
+        return { item, isFirst, isLast, cls };
+      });
+
+      html += `<div class="calendar-cell${isToday ? ' calendar-cell-today' : ''}${isWeekend ? ' calendar-cell-weekend' : ''}">
+        <div class="calendar-cell-num">${d}</div>
+        <div class="calendar-cell-items">
+          ${dayItemBars.map(b => {
+            const label = b.isFirst ? `<span class="roadmap-bar-label">${item.type === 'product' ? '📦' : '📁'} ${b.item.name.substring(0, 15)}</span>` : '';
+            return `<div class="roadmap-bar ${b.cls} ${b.isFirst ? 'roadmap-bar-first' : ''} ${b.isLast ? 'roadmap-bar-last' : ''}" title="${b.item.name} (${b.item.type})" onclick="Views._roadmapItemDetail('${b.item.id}', '${b.item.type}')">${label}</div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }
+
+    html += `</div></div>`;
+    return html;
+  }
+
+  static _renderWeekCalendar(items, date) {
+    const startOfWeek = new Date(date);
+    startOfWeek.setDate(startOfWeek.getDate() - ((startOfWeek.getDay() + 6) % 7));
+
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    let html = `<div class="calendar-week"><div class="calendar-week-header">`;
+    html += `<div class="calendar-week-label">Item</div>`;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(startOfWeek);
+      d.setDate(d.getDate() + i);
+      const dateStr = d.toISOString().slice(0, 10);
+      const isToday = dateStr === new Date().toISOString().slice(0, 10);
+      html += `<div class="calendar-week-day${isToday ? ' calendar-week-today' : ''}">
+        <div>${dayNames[i]}</div>
+        <div class="calendar-week-date">${d.getDate()}</div>
+      </div>`;
+    }
+    html += `</div><div class="calendar-week-body">`;
+
+    // Filter items that overlap with this week
+    const weekEnd = new Date(startOfWeek);
+    weekEnd.setDate(weekEnd.getDate() + 6);
+    const weekStartStr = startOfWeek.toISOString().slice(0, 10);
+    const weekEndStr = weekEnd.toISOString().slice(0, 10);
+
+    const weekItems = items.filter(item => {
+      if (!item.start || !item.end) return false;
+      return item.start <= weekEndStr && item.end >= weekStartStr;
+    });
+
+    // Sort by start date
+    weekItems.sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+
+    for (const item of weekItems) {
+      const cls = Views._getRoadmapItemClass(item);
+      const itemStart = item.start.slice(0, 10);
+      const itemEnd = item.end.slice(0, 10);
+
+      html += `<div class="calendar-week-row">
+        <div class="calendar-week-label">
+          <span class="roadmap-bar-label">${item.type === 'product' ? '📦' : '📁'} ${item.name}</span>
+        </div>`;
+
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(startOfWeek);
+        d.setDate(d.getDate() + i);
+        const dateStr = d.toISOString().slice(0, 10);
+        const inRange = dateStr >= itemStart && dateStr <= itemEnd;
+        const isFirst = dateStr === itemStart || (i === 0 && itemStart < weekStartStr);
+        const isLast = dateStr === itemEnd || (i === 6 && itemEnd > weekEndStr);
+
+        html += `<div class="calendar-week-cell">
+          ${inRange ? `<div class="roadmap-bar roadmap-bar-week ${cls} ${isFirst ? 'roadmap-bar-first' : ''} ${isLast ? 'roadmap-bar-last' : ''}" title="${item.name}" onclick="Views._roadmapItemDetail('${item.id}', '${item.type}')"></div>` : ''}
+        </div>`;
+      }
+      html += `</div>`;
+    }
+
+    if (weekItems.length === 0) {
+      html += `<div class="calendar-week-row"><div class="calendar-week-label" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">No items this week</div></div>`;
+    }
+
+    html += `</div></div>`;
+    return html;
+  }
+
+  static _renderDayCalendar(items, date) {
+    const dateStr = date.toISOString().slice(0, 10);
+    const dayName = date.toLocaleString('default', { weekday: 'long' });
+
+    // Filter items for this day
+    const dayItems = items.filter(item => {
+      if (!item.start || !item.end) return false;
+      return item.start.slice(0, 10) <= dateStr && item.end.slice(0, 10) >= dateStr;
+    });
+
+    let html = `<div class="calendar-day">
+      <h3>${dayName}, ${date.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' })}</h3>`;
+
+    if (dayItems.length === 0) {
+      html += `<div class="empty-state">No items scheduled for this day</div>`;
+    } else {
+      html += `<div class="calendar-day-list">`;
+      for (const item of dayItems) {
+        const cls = Views._getRoadmapItemClass(item);
+        const icon = item.type === 'product' ? '📦' : '📁';
+        const dates = `${item.start} → ${item.end}`;
+        const extra = item.type === 'project' ? `<br><small>${item.completion}% complete | Priority: ${item.priority || '—'}</small>` : '';
+        html += `<div class="calendar-day-item ${cls}" onclick="Views._roadmapItemDetail('${item.id}', '${item.type}')">
+          <div class="calendar-day-item-header">
+            <span class="calendar-day-item-icon">${icon}</span>
+            <strong>${item.name}</strong>
+            <span class="badge ${cls}">${item.status}</span>
+          </div>
+          <div class="calendar-day-item-dates">${dates}${extra}</div>
+        </div>`;
+      }
+      html += `</div>`;
+    }
+
+    html += `</div>`;
+    return html;
+  }
+
+  static _getRoadmapItemClass(item) {
+    const st = item.status || '';
+    if (st === 'Completed' || st === 'Approved') return 'badge-green';
+    if (st === 'In Progress' || st === 'Active') return 'badge-blue';
+    if (st === 'On Hold' || st === 'Pending') return 'badge-amber';
+    if (st === 'Not Started' || st === 'Rejected' || st === 'N/A') return 'badge-gray';
+    return 'badge-blue';
+  }
+
+  // Roadmap navigation
+  static _roadmapPrev() {
+    const state = window._roadmapState;
+    const d = new Date(state.currentDate + 'T00:00:00');
+    switch (state.view) {
+      case 'month': d.setMonth(d.getMonth() - 1); break;
+      case 'week': d.setDate(d.getDate() - 7); break;
+      case 'day': d.setDate(d.getDate() - 1); break;
+    }
+    state.currentDate = d.toISOString().slice(0, 10);
+    Views.render('roadmap');
+  }
+
+  static _roadmapNext() {
+    const state = window._roadmapState;
+    const d = new Date(state.currentDate + 'T00:00:00');
+    switch (state.view) {
+      case 'month': d.setMonth(d.getMonth() + 1); break;
+      case 'week': d.setDate(d.getDate() + 7); break;
+      case 'day': d.setDate(d.getDate() + 1); break;
+    }
+    state.currentDate = d.toISOString().slice(0, 10);
+    Views.render('roadmap');
+  }
+
+  static _roadmapToday() {
+    window._roadmapState.currentDate = new Date().toISOString().slice(0, 10);
+    Views.render('roadmap');
+  }
+
+  static _roadmapSetView(view) {
+    window._roadmapState.view = view;
+    Views.render('roadmap');
+  }
+
+  static async _roadmapItemDetail(id, type) {
+    let record;
+    if (type === 'project') {
+      record = await ds.getById('pm_project', id);
+    } else {
+      record = await ds.getById('pm_product', id);
+    }
+
+    if (!record) { Components.toast('Item not found', 'error'); return; }
+
+    let extraHtml = `<div class="detail-section">`;
+    if (type === 'project') {
+      extraHtml += `
+        <p><strong>Status:</strong> ${record.pm_status || '—'}</p>
+        <p><strong>Start:</strong> ${record.pm_startdate || '—'} → <strong>Target:</strong> ${record.pm_targetdeliverydate || '—'}</p>
+        <p><strong>Completion:</strong> ${record.pm_overallcompletion || 0}% | <strong>Priority:</strong> ${record.pm_priority || '—'}</p>
+        <p><strong>PSC:</strong> ${record.pm_psc || '—'} | <strong>Q:</strong> ${record.pm_yearquarter || '—'}</p>
+        ${record.pm_scope ? `<p><strong>Scope:</strong> ${record.pm_scope}</p>` : ''}
+      `;
+    } else {
+      extraHtml += `
+        <p><strong>Governance:</strong> ${record.pm_governancestatus || '—'}</p>
+        <p><strong>Start:</strong> ${record.pm_startdate || '—'} → <strong>Target:</strong> ${record.pm_targetdate || '—'}</p>
+        <p><strong>Contact:</strong> ${record.pm_contact || '—'}</p>
+        <p><strong>Journey:</strong> ${record.pm_journeyname || '—'} (${record.pm_shortname || ''})</p>
+      `;
+    }
+    extraHtml += `</div>`;
+
+    Components.modal.open({
+      title: `${type === 'project' ? '📁' : '📦'} ${record.pm_name || record.pm_title}`,
+      fields: [],
+      extraContent: extraHtml,
+      onSave: () => Components.modal.close()
+    });
+  }
 }
