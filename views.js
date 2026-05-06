@@ -240,10 +240,11 @@ class Views {
   static async product() {
     const data = await ds.getAll('pm_product');
     const links = await ds.getAll('pm_capabilityproduct');
+    const projects = await ds.getAll('pm_project');
 
     const statsHtml = Components.renderStats([
       { value: data.length, label: 'Products' },
-      { value: links.length, label: 'Capability Links' },
+      { value: projects.length, label: 'Projects' },
       { value: data.filter(p => p.pm_governancestatus === 'Approved').length, label: 'Approved' }
     ]);
 
@@ -251,12 +252,27 @@ class Views {
     for (const prod of data) {
       const capabilities = await ds.getCapabilitiesByProduct(prod.id);
       const capNames = capabilities.map(c => c.pm_name).join(', ') || 'None';
+      const prodProjects = projects.filter(p => p.pm_productname === prod.id);
+
+      let projectsHtml = '';
+      if (prodProjects.length === 0) {
+        projectsHtml = '<span class="text-muted">—</span>';
+      } else {
+        projectsHtml = prodProjects.map(p => `
+          <div class="product-project-item" onclick="Views._editProject('${p.id}')" title="Click to edit">
+            <span class="badge ${Components._getBadgeClass(p.pm_status)}">${p.pm_status}</span>
+            <span class="product-project-name">${p.pm_name}</span>
+            <span class="product-project-pct">${p.pm_overallcompletion || 0}%</span>
+          </div>
+        `).join('');
+      }
+
       rows += `
         <tr>
           <td><strong>${prod.pm_name}</strong><br><small>${prod.pm_journeyname || ''} (${prod.pm_shortname || ''})</small></td>
           <td>${capNames}</td>
           <td><span class="badge ${Components._getBadgeClass(prod.pm_governancestatus)}">${prod.pm_governancestatus || 'N/A'}</span></td>
-          <td>${prod.pm_contact || '—'}</td>
+          <td><div class="product-projects-list">${projectsHtml}</div></td>
           <td class="actions-cell">
             <button class="btn-sm btn-edit" onclick="Views._editProduct('${prod.id}')">✏️ Edit</button>
             <button class="btn-sm btn-link" onclick="Views._viewProductPipeline('${prod.id}')">📊 Pipeline</button>
@@ -274,7 +290,7 @@ class Views {
       <div class="stats-row">${statsHtml}</div>
       ${data.length === 0 ? '<div class="empty-state">No products found.</div>' : `
         <table class="data-table">
-          <thead><tr><th>Product</th><th>Capabilities</th><th>Governance</th><th>Contact</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Product</th><th>Capabilities</th><th>Governance</th><th>Projects</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
       `}

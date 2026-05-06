@@ -577,6 +577,40 @@ body {
     gap: 8px;
   }
 }
+/* ======== PRODUCT PROJECT LIST ======== */
+.product-projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-project-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.product-project-item:hover { background: var(--bg); }
+
+.product-project-name {
+  font-size: 0.82rem;
+  color: var(--text);
+  flex: 1;
+}
+
+.product-project-pct {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.text-muted { color: var(--text-muted); font-size: 0.85rem; }
+
+/* ======== ROADMAP / CALENDAR ======== */
 .roadmap-controls {
   display: flex;
   align-items: center;
