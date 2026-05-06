@@ -405,7 +405,8 @@ body {
 }
 
 .filter-bar input,
-.filter-bar select {
+.filter-bar select,
+.search-input {
   padding: 8px 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -414,9 +415,16 @@ body {
 }
 
 .filter-bar input:focus,
-.filter-bar select:focus {
+.filter-bar select:focus,
+.search-input:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
 }
 
 /* ======== EMPTY STATE ======== */

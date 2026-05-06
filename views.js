@@ -45,7 +45,7 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newResource()">+ New Resource</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
-      <div id="filterArea"></div>
+      <div class="filter-bar">${Components.renderSearchBar('Search resources by name, role, department...')}</div>
       <div id="tableArea">${this._buildResourceTable(data)}</div>
     `;
   }
@@ -144,13 +144,13 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newCapability()">+ New Capability</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
-      <div id="filterArea"></div>
-      ${data.length === 0 ? '<div class="empty-state">No capabilities found.</div>' : `
+      <div class="filter-bar">${Components.renderSearchBar('Search capabilities...')}</div>
+      <div id="tableArea">${data.length === 0 ? '<div class="empty-state">No capabilities found.</div>' : `
         <table class="data-table">
           <thead><tr><th>Capability</th><th>Linked Products</th><th>Requirements</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-      `}
+      `}</div>
     `;
   }
 
@@ -289,12 +289,13 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newProduct()">+ New Product</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
-      ${data.length === 0 ? '<div class="empty-state">No products found.</div>' : `
+      <div class="filter-bar">${Components.renderSearchBar('Search products, capabilities, journey...')}</div>
+      <div id="tableArea">${data.length === 0 ? '<div class="empty-state">No products found.</div>' : `
         <table class="data-table">
           <thead><tr><th>Product</th><th>Capabilities</th><th>Governance</th><th>Projects</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-      `}
+      `}</div>
     `;
   }
 
@@ -454,12 +455,13 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newRequirement()">+ New Requirement</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
-      ${data.length === 0 ? '<div class="empty-state">No requirements found.</div>' : `
+      <div class="filter-bar">${Components.renderSearchBar('Search requirements, capabilities, products...')}</div>
+      <div id="tableArea">${data.length === 0 ? '<div class="empty-state">No requirements found.</div>' : `
         <table class="data-table">
           <thead><tr><th>Detail</th><th>Capability</th><th>Product</th><th>Status</th><th>PSC Approval</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-      `}
+      `}</div>
     `;
   }
 
@@ -616,12 +618,13 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newProject()">+ New Project</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
-      ${data.length === 0 ? '<div class="empty-state">No projects found.</div>' : `
+      <div class="filter-bar">${Components.renderSearchBar('Search projects, scope, status...')}</div>
+      <div id="tableArea">${data.length === 0 ? '<div class="empty-state">No projects found.</div>' : `
         <table class="data-table">
           <thead><tr><th>Project</th><th>Product</th><th>Status</th><th>Completion</th><th>Related</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-      `}
+      `}</div>
     `;
   }
 
@@ -747,12 +750,13 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newEpic()">+ New Epic</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
-      ${data.length === 0 ? '<div class="empty-state">No epics found.</div>' : `
+      <div class="filter-bar">${Components.renderSearchBar('Search epics, projects, developers...')}</div>
+      <div id="tableArea">${data.length === 0 ? '<div class="empty-state">No epics found.</div>' : `
         <table class="data-table">
           <thead><tr><th>Epic</th><th>Project</th><th>RAG</th><th>Effort</th><th>Stories</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-      `}
+      `}</div>
     `;
   }
 
@@ -938,12 +942,13 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newRisk()">+ New Risk</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
-      ${data.length === 0 ? '<div class="empty-state">No risks found.</div>' : `
+      <div class="filter-bar">${Components.renderSearchBar('Search risks, summaries, projects...')}</div>
+      <div id="tableArea">${data.length === 0 ? '<div class="empty-state">No risks found.</div>' : `
         <table class="data-table">
           <thead><tr><th>Risk</th><th>Project</th><th>Dependencies</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-      `}
+      `}</div>
     `;
   }
 
@@ -1044,10 +1049,11 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newDependency()">+ New Dependency</button>
       </div>
       ${data.length === 0 ? '<div class="empty-state">No dependencies found.</div>' : `
-        <table class="data-table">
+        <div class="filter-bar">${Components.renderSearchBar('Search dependencies, risks...')}</div>
+        <div id="tableArea"><table class="data-table">
           <thead><tr><th>Dependency</th><th>Linked Risk</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
-        </table>
+        </table></div>
       `}
     `;
   }
@@ -1140,11 +1146,12 @@ class Views {
         <button class="btn btn-primary" onclick="Views._newUserStory()">+ New Story</button>
       </div>
       <div class="stats-row">${statsHtml}</div>
+      <div class="filter-bar">${Components.renderSearchBar('Search stories, epics, acceptance criteria...')}</div>
       ${stories.length === 0 ? '<div class="empty-state">No stories found.</div>' : `
-        <table class="data-table">
+        <div id="tableArea"><table class="data-table">
           <thead><tr><th>Story</th><th>Epic</th><th>Acceptance Criteria</th><th>Actions</th></tr></thead>
           <tbody>${rows}</tbody>
-        </table>`}`;
+        </table></div>`}`;
   }
 
   static async _newUserStory() {

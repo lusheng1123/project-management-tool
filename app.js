@@ -106,3 +106,15 @@
   // Start
   document.addEventListener('DOMContentLoaded', init);
 })();
+
+// Global dashboard search filter
+window._filterDashboard = function(term) {
+  const tbody = document.querySelector('.data-table tbody');
+  if (!tbody) return;
+  const rows = tbody.querySelectorAll('tr');
+  const t = term.toLowerCase().trim();
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = (!t || text.includes(t)) ? '' : 'none';
+  });
+};

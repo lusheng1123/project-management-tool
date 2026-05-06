@@ -188,6 +188,11 @@ class Components {
     `;
   }
 
+  // ========== SEARCH ==========
+  static renderSearchBar(placeholder) {
+    return `<input type="text" class="search-input" placeholder="${placeholder || '🔍 Search...'}" oninput="window._filterDashboard(this.value)">`;
+  }
+
   // ========== TOAST ==========
   static toast(message, type = 'success') {
     const toast = document.createElement('div');
